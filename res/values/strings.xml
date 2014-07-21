@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Menu Generic -->
+    <string name="menu_update">修改</string>
+    <string name="menu_delete">刪除</string>
+    
+    
+    <string name="app_name">DrinkOrder</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="btn_show_sign_in">登入</string>
+    <string name="tv_user_name">帳號</string>
+    <string name="tv_password">密碼</string>
+    <string name="btn_signIn">登入</string>
+    <string name="btn_ok">確認</string>
+    <string name="btn_abort">重設</string>
+    <string name="sign_in_failure">登入失敗</string>
+    <string name="choose_drink">請選擇飲料</string>
+    <string name="sugar_level">甜度</string>
+    <string name="ice_level">冰塊</string>
+    <string name="quantity">數量</string>
+    <string name="btn_add_drink">選擇</string>
+    <string name="btn_modify_drink">修改</string>
+    <string name="btn_delete_drink">刪除</string>
+    <string name="dlg_msg_confirm_delete">確定刪除 ?</string>
+    <string name="dlg_btn_yes">是</string>
+    <string name="dlg_btn_no">否</string>
+
+    <string-array name="sugar_level_items">
+        <item>正常</item>
+        <item>少糖</item>
+        <item>半糖</item>
+        <item>微糖</item>
+        <item>無糖</item>
+    </string-array>
+    <string-array name="ice_level_items">
+        <item>正常</item>
+        <item>少冰</item>
+        <item>微冰</item>
+        <item>去冰</item>
+    </string-array>
+
+</resources>

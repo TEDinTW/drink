@@ -1,0 +1,64 @@
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:stretchColumns="*" >
+
+    <TableRow>
+
+        <TextView
+            style="@style/inputCaption"
+            android:text="@string/tv_user_name" />
+
+        <EditText
+            android:id="@+id/etUserName"
+            style="@style/inputField"
+            android:layout_span="2"
+            android:inputType="none" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            style="@style/inputCaption"
+            android:text="@string/tv_password" />
+
+        <EditText
+            android:id="@+id/etPassword"
+            style="@style/inputField"
+            android:layout_span="2"
+            android:inputType="textPassword" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            style="@style/inputCaption"
+            android:layout_span="3"
+            android:text="測試用帳號密碼 jason/1234" />
+    </TableRow>
+
+    <TableRow>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_span="3"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btnSignIn"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:onClick="signIn"
+                android:text="@string/btn_signIn" />
+
+            <Button
+                android:id="@+id/btnAbort"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:onClick="abort"
+                android:text="@string/btn_abort" />
+        </LinearLayout>
+    </TableRow>
+
+</TableLayout>

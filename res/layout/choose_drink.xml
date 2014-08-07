@@ -16,16 +16,65 @@
         <Spinner
             android:id="@+id/spChooseDrink"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" 
-            android:layout_weight="3"/>
+            android:layout_height="wrap_content"
+            android:layout_weight="3" />
 
         <Button
             android:id="@+id/btnAddDrink"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="addDrink"
             android:layout_weight="1"
+            android:onClick="addDrink"
             android:text="@string/btn_add_drink" />
+    </LinearLayout>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/tv_drinkName_name"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+        </TextView>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/tv_ice_level"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+        </TextView>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/tv_sugar_level"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+        </TextView>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            android:text="@string/tv_quantity"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+        </TextView>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            android:text="@string/tv_subtotal"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+        </TextView>
     </LinearLayout>
 
     <ListView
@@ -35,5 +84,54 @@
         android:layout_weight="1"
         android:background="@color/lime"
         android:drawSelectorOnTop="false" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/tvTotalQtyCaption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="@string/tv_total_quantity"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/tvTotalQty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tvTotalQtyCaption"
+            android:paddingLeft="5dp"
+            android:paddingRight="10dp"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/tvTotalAmountCaption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tvTotalQty"
+            android:text="@string/tv_total_amount"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/tvTotalAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tvTotalAmountCaption"
+            android:paddingLeft="5dp"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+        </TextView>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnMoveToReview"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="moveToReview"
+        android:text="@string/btn_submit_order" />
 
 </LinearLayout>

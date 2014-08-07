@@ -6,6 +6,8 @@ public class OrderedDrinkAdapterElement extends ViewWithIdAdapterElement{
 	String sugarLevel;
 	String iceLevel;
 	int quantity;
+	int unitPrice;
+	int subTotal;
 
 	public String getDrinkName() {
 		return drinkName;
@@ -37,6 +39,22 @@ public class OrderedDrinkAdapterElement extends ViewWithIdAdapterElement{
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+
+	public int getUnitPrice() {
+		return unitPrice;
+	}
+
+	public void setUnitPrice(int unitPrice) {
+		this.unitPrice = unitPrice;
+	}
+
+	public int getSubTotal() {
+		return subTotal;
+	}
+
+	public void setSubTotal(int subTotal) {
+		this.subTotal = subTotal;
 	}
 
 }

@@ -3,13 +3,6 @@
     android:layout_height="fill_parent"
     android:stretchColumns="*" >
 
-    <TableRow>
-
-        <TextView
-            android:id="@+id/tvDrinkName"
-            style="@style/dialogInputCaption"
-            android:layout_span="3" />
-    </TableRow>
 
     <TableRow>
 
@@ -21,8 +14,7 @@
             android:id="@+id/spSugarLevel"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_span="2"
-            android:entries="@array/sugar_level_items" />
+            android:layout_span="2" />
     </TableRow>
 
     <TableRow>
@@ -35,8 +27,7 @@
             android:id="@+id/spIceLevel"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_span="2"
-            android:entries="@array/ice_level_items" />
+            android:layout_span="2" />
     </TableRow>
 
     <TableRow>
@@ -85,6 +76,15 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/btn_ok" />
+            
+            
+            
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/btn_cancel" />
         </LinearLayout>
     </TableRow>
 

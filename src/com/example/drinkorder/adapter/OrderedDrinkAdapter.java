@@ -35,12 +35,13 @@ public class OrderedDrinkAdapter extends ViewWithIdAdapter<OrderedDrinkAdapterEl
 			TextView tvIceLevel = (TextView) v.findViewById(R.id.tvIceLevel);
 			TextView tvSugarLevel = (TextView) v.findViewById(R.id.tvSugarLevel);
 			TextView tvQuantity = (TextView) v.findViewById(R.id.tvQuantity);
-
+			TextView tvSubTotal = (TextView) v.findViewById(R.id.tvSubTotal);
+			
 			tvDrinkName.setText(element.getDrinkName());
 			tvIceLevel.setText(element.getIceLevel());
 			tvSugarLevel.setText(element.getSugarLevel());
 			tvQuantity.setText(String.valueOf(element.getQuantity()));
-
+			tvSubTotal.setText(String.valueOf(element.getSubTotal()));
 		}
 		return v;
 	}

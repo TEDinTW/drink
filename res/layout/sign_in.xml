@@ -1,64 +1,82 @@
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:stretchColumns="*" >
+    android:orientation="vertical" >
 
-    <TableRow>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
 
         <TextView
-            style="@style/inputCaption"
-            android:text="@string/tv_user_name" />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|right"
+            android:text="@string/tv_user_name"
+            android:textAppearance="?android:attr/textAppearanceLarge" >
+        </TextView>
 
         <EditText
             android:id="@+id/etUserName"
-            style="@style/inputField"
-            android:layout_span="2"
-            android:inputType="none" />
-    </TableRow>
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:textAppearance="?android:attr/textAppearanceLarge" >
+        </EditText>
+    </LinearLayout>
 
-    <TableRow>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
 
         <TextView
-            style="@style/inputCaption"
-            android:text="@string/tv_password" />
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical|right"
+            android:text="@string/tv_password"
+            android:textAppearance="?android:attr/textAppearanceLarge" >
+        </TextView>
 
         <EditText
             android:id="@+id/etPassword"
-            style="@style/inputField"
-            android:layout_span="2"
-            android:inputType="textPassword" />
-    </TableRow>
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:textAppearance="?android:attr/textAppearanceLarge" >
+        </EditText>
+    </LinearLayout>
 
-    <TableRow>
+    <CheckBox
+        android:id="@+id/chkRememberMe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/chk_remember_me" />
 
-        <TextView
-            style="@style/inputCaption"
-            android:layout_span="3"
-            android:text="測試用帳號密碼 jason/1234" />
-    </TableRow>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal" >
 
-    <TableRow>
-
-        <LinearLayout
+        <Button
+            android:id="@+id/btnSignIn"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_span="3"
-            android:orientation="horizontal" >
+            android:layout_height="wrap_content"
+            android:onClick="signIn"
+            android:text="@string/btn_signIn" />
 
-            <Button
-                android:id="@+id/btnSignIn"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:onClick="signIn"
-                android:text="@string/btn_signIn" />
+        <Button
+            android:id="@+id/btnAbort"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:onClick="abort"
+            android:text="@string/btn_abort" />
+    </LinearLayout>
 
-            <Button
-                android:id="@+id/btnAbort"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:onClick="abort"
-                android:text="@string/btn_abort" />
-        </LinearLayout>
-    </TableRow>
-
-</TableLayout>
+</LinearLayout>

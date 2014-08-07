@@ -4,17 +4,17 @@
     <!-- Menu Generic -->
     <string name="menu_update">修改</string>
     <string name="menu_delete">刪除</string>
-    
-    
     <string name="app_name">DrinkOrder</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-    <string name="btn_show_sign_in">登入</string>
-    <string name="tv_user_name">帳號</string>
-    <string name="tv_password">密碼</string>
+    <string name="start_to_use">開始使用</string>
+    <string name="tv_user_name">帳號:</string>
+    <string name="tv_password">密碼:</string>
     <string name="btn_signIn">登入</string>
     <string name="btn_ok">確認</string>
+    <string name="btn_cancel">取消</string>
     <string name="btn_abort">重設</string>
+    <string name="btn_submit_order">送出訂單</string>
     <string name="sign_in_failure">登入失敗</string>
     <string name="choose_drink">請選擇飲料</string>
     <string name="sugar_level">甜度</string>
@@ -26,19 +26,27 @@
     <string name="dlg_msg_confirm_delete">確定刪除 ?</string>
     <string name="dlg_btn_yes">是</string>
     <string name="dlg_btn_no">否</string>
-
-    <string-array name="sugar_level_items">
-        <item>正常</item>
-        <item>少糖</item>
-        <item>半糖</item>
-        <item>微糖</item>
-        <item>無糖</item>
-    </string-array>
-    <string-array name="ice_level_items">
-        <item>正常</item>
-        <item>少冰</item>
-        <item>微冰</item>
-        <item>去冰</item>
-    </string-array>
+    <string name="error_generic_title">錯誤</string>
+    <string name="error_msg_unexpected_error">系統錯誤 請稍後再試</string>
+    <string name="error_no_commerce_item_selected">尚未選取任何產品</string>
+    <string name="tv_drinkName_name">品名</string>
+    <string name="tv_sugar_level">甜度</string>
+    <string name="tv_ice_level">冰塊</string>
+    <string name="tv_quantity">數量</string>
+    <string name="tv_subtotal">金額</string>
+    <string name="tv_total_quantity">總數量:</string>
+    <string name="tv_total_amount">總金額:</string>
+    <string name="tv_contact_name">聯絡人姓名:</string>
+    <string name="tv_contact_phone">聯絡電話:</string>
+    <string name="tv_delivery_addrress">送達地址:</string>
+    <string name="btn_change_phone_addr">更改電話或地址</string>
+    <string name="order_review_title">訂單確認</string>
+    <string name="tv_order_id">訂單編號:</string>
+    <string name="order_successful_submission_text">訂單送出成功, 感謝您的訂購</string>
+    <string name="chk_remember_me">自動登入</string>
+    <string name="change_delivery_contact_title">更改聯絡資料</string>
+    
+    <!-- temp -->
+    <string name="menu_signout">登出</string>
 
 </resources>

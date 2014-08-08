@@ -10,7 +10,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import android.app.DialogFragment;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -43,6 +42,7 @@ import com.example.drinkorder.dialog.GenericConfirmationDialogListerner;
 import com.example.drinkorder.dialog.GenericDeleteConfirmationDialogListerner;
 import com.example.drinkorder.utils.BeansToAdapterElementsConverter;
 import com.example.drinkorder.utils.JsonManager;
+import com.example.drinkorder.utils.PreferencesManager;
 import com.example.drinkorder.utils.WebServiceGateway;
 
 public class DrinkOrderActivity extends FragmentActivity implements GenericConfirmationDialogListerner, GenericDeleteConfirmationDialogListerner {
@@ -54,7 +54,7 @@ public class DrinkOrderActivity extends FragmentActivity implements GenericConfi
 	private List<String> drinKNames;
 	private List<String> sugarLevels;
 	private List<String> iceLevels;
- 
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -159,9 +159,6 @@ public class DrinkOrderActivity extends FragmentActivity implements GenericConfi
 		lvOrderDrinks.setAdapter(adapter);
 	}
 
-	
-	
-	
 	@Override
 	public void doPositiveClick(Bundle bundle) {
 		int cmd = bundle.getInt(Constants.CMD);
@@ -204,32 +201,26 @@ public class DrinkOrderActivity extends FragmentActivity implements GenericConfi
 	protected void onResume() {
 		super.onResume();
 
-		if(JsonManager.getOrderedDrinks(this)!=null){
+		if (JsonManager.getOrderedDrinks(this) != null) {
 			orderedDrinks = JsonManager.getOrderedDrinks(this);
 		}
-		
+
 		refreshList(orderedDrinks);
 	}
-	
-	
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return true;
-    }
-    
-    
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu, menu);
+		return true;
+	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.muSignOut:
-			SharedPreferences pref = getSharedPreferences(Constants.PREF_FILE_CREDENTIAL, 0);
-			SharedPreferences.Editor editor = pref.edit();
-			editor.remove(Constants.PREF_KEY_AUTHENTICATED_USER_JSON);
-			editor.remove(Constants.PREF_KEY_CREDENTIAL_SAVED);
-			editor.commit();
+			PreferencesManager.removeSavedCredential(this);
 
 			Intent intent = new Intent(this, SignInActivity.class);
 			startActivity(intent);
@@ -246,13 +237,7 @@ public class DrinkOrderActivity extends FragmentActivity implements GenericConfi
 			ObjectMapper mapper = new ObjectMapper();
 			try {
 				String jsonStr = mapper.writeValueAsString(orderDrinksBean);
-				SharedPreferences pref = getSharedPreferences(Constants.PREF_FILE_ORDERED_DRINK, 0);
-				SharedPreferences.Editor editor = pref.edit();
-				editor.putString(Constants.PREF_KEY_ORDERED_DRINK_JSON, jsonStr);
-
-				// Commit the edits!
-				editor.commit();
-
+				PreferencesManager.serializeOrderedDrink(this, jsonStr);
 			} catch (JsonGenerationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -268,9 +253,21 @@ public class DrinkOrderActivity extends FragmentActivity implements GenericConfi
 
 	private class GetDrinkDataTask extends AsyncTask<Void, Void, DrinkData> {
 		@Override
-		protected DrinkData doInBackground(Void... xx) {
-			return WebServiceGateway.getDrinkData();
+		protected DrinkData doInBackground(Void... params) {
+			String latestDrinkDataStr = WebServiceGateway.getDrinkDataJsonString();
 
+			if (latestDrinkDataStr != null) {
+				// Retrieve the drink data from server and serialize it to
+				// preference file
+				PreferencesManager.serializeDrinkData(DrinkOrderActivity.this, latestDrinkDataStr);
+
+				return WebServiceGateway.getDrinkData();
+			} else {
+
+				// If not able to retrieve the latest drink data, load from the
+				// preference file
+				return JsonManager.getDrinkData(DrinkOrderActivity.this);
+			}
 		}
 
 		// onPostExecute displays the results of the AsyncTask.
@@ -323,9 +320,9 @@ public class DrinkOrderActivity extends FragmentActivity implements GenericConfi
 	@Override
 	protected void onPause() {
 		super.onPause();
-		
+
 		serializedOrderDrinks(orderedDrinks);
-		
+
 	}
 
 }

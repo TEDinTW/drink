@@ -1,6 +1,7 @@
 package com.example.drinkorder.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -32,4 +33,16 @@ public class OrderConfirmationActivity extends Activity {
 		tvContactAddress.setText(contactAddress);
 		
 	}
+
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		super.onBackPressed();
+		
+		// In order confirmation page, when back key is pressed, return to the drink choosing activity
+		Intent intent = new Intent(this, DrinkOrderActivity.class);
+		startActivity(intent);
+	}
+	
+	
 }

@@ -9,9 +9,8 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
-import com.example.drinkorder.Constants;
+import com.example.drinkorder.bean.jackson.DrinkData;
 import com.example.drinkorder.bean.jackson.OrderedDrink;
 import com.example.drinkorder.bean.jackson.OrderedDrinks;
 import com.example.drinkorder.bean.jackson.User;
@@ -19,9 +18,9 @@ import com.example.drinkorder.bean.jackson.User;
 public class JsonManager {
 	public static List<OrderedDrink> getOrderedDrinks(Context context) {
 
+		String jsonStr = PreferencesManager.loadOrderedDrink(context);
+		
 		List<OrderedDrink> orderedDrinks = null;
-		SharedPreferences pref = context.getSharedPreferences(Constants.PREF_FILE_ORDERED_DRINK, 0);
-		String jsonStr = pref.getString(Constants.PREF_KEY_ORDERED_DRINK_JSON, null);
 		if (!StringUtil.isEmpty(jsonStr)) {
 			ObjectMapper mapper = new ObjectMapper();
 
@@ -43,9 +42,34 @@ public class JsonManager {
 		return orderedDrinks;
 	}
 
+	public static DrinkData getDrinkData(Context context) {
+		String jsonStr = PreferencesManager.loadDrinkData(context);
+
+		DrinkData drinkData = null;
+		if (!StringUtil.isEmpty(jsonStr)) {
+			ObjectMapper mapper = new ObjectMapper();
+
+			try {
+				drinkData = mapper.readValue(jsonStr, DrinkData.class);
+
+			} catch (JsonParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return drinkData;
+	}
+
+	
 	public static User getSignInUser(Context context) {
-		SharedPreferences pref = context.getSharedPreferences(Constants.PREF_FILE_CREDENTIAL, 0);
-		String jsonStr = pref.getString(Constants.PREF_KEY_AUTHENTICATED_USER_JSON, null);
+		String jsonStr = PreferencesManager.loadUser(context);
+
 		User user = null;
 		if (!StringUtil.isEmpty(jsonStr)) {
 			ObjectMapper mapper = new ObjectMapper();
@@ -66,7 +90,7 @@ public class JsonManager {
 		}
 		return user;
 	}
-
+	
 	public static Object parseSubmitOrderResponse(String jsonStr, Class<?> cls) {
 		Object response = null;
 		if (!StringUtil.isEmpty(jsonStr)) {

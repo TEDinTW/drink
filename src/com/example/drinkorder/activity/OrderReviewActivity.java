@@ -4,7 +4,6 @@ import java.util.List;
 
 import android.app.DialogFragment;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -25,6 +24,7 @@ import com.example.drinkorder.dialog.GenericAlertDialog;
 import com.example.drinkorder.dialog.GenericConfirmationDialogListerner;
 import com.example.drinkorder.utils.BeansToAdapterElementsConverter;
 import com.example.drinkorder.utils.JsonManager;
+import com.example.drinkorder.utils.PreferencesManager;
 import com.example.drinkorder.utils.WebServiceGateway;
 
 public class OrderReviewActivity extends FragmentActivity implements GenericConfirmationDialogListerner {
@@ -147,10 +147,11 @@ public class OrderReviewActivity extends FragmentActivity implements GenericConf
 		// onPostExecute displays the results of the AsyncTask.
 		@Override
 		protected void onPostExecute(SubmitOrderResponse response) {
-			if (response.isHasErrors()) {
+			if (response ==null || response.isHasErrors()) {
 				
 				String errorMessage=null;
-				if(response.getErrors()!=null && !response.getErrors().isEmpty()){
+				
+				if(response!=null && response.getErrors()!=null && !response.getErrors().isEmpty()){
 					// only retrieve the first error message
 					errorMessage=response.getErrors().get(0).getErrorMessage();
 				}else{
@@ -166,11 +167,7 @@ public class OrderReviewActivity extends FragmentActivity implements GenericConf
 
 			} else {
 				// Once the order is successfully submitted, clear the ordered list from preference
-				SharedPreferences pref = getSharedPreferences(Constants.PREF_FILE_ORDERED_DRINK, 0);
-				SharedPreferences.Editor editor = pref.edit();
-				editor.remove(Constants.PREF_KEY_ORDERED_DRINK_JSON);
-				editor.commit();
-				
+				PreferencesManager.removeOrderedDrink(OrderReviewActivity.this);
 				
 				Intent intent = new Intent(OrderReviewActivity.this, OrderConfirmationActivity.class);
 				intent.putExtra(Constants.ORDER_ID_PARAM_NAME, response.getOrderId());

@@ -49,12 +49,24 @@ public class WebServiceGateway {
 		return null;
 	}
 
+	public static String getDrinkDataJsonString() {
+		try {
+			URL url = new URL(drinkDataURL);
+			return jsonGet(url);
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	
+	
 	public static DrinkData getDrinkData() {
 		DrinkData drinkData = null;
 		try {
-			URL url = new URL(drinkDataURL);
-			String respJsonStr = jsonGet(url);
-			return (DrinkData) JsonManager.parseSubmitOrderResponse(respJsonStr, DrinkData.class);
+			return (DrinkData) JsonManager.parseSubmitOrderResponse(getDrinkDataJsonString(), DrinkData.class);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

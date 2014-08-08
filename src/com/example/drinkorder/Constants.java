@@ -32,6 +32,7 @@ public class Constants {
 	public static final String PREF_FILE_SETTING="shared_preference_setting";	
 	
 	// preference key
+	public static final String PREF_KEY_DRINK_DATA_JSON="drink_data_json";
 	public static final String PREF_KEY_ORDERED_DRINK_JSON="ordered_drink_json";
 	public static final String PREF_KEY_AUTHENTICATED_USER_JSON="authenticated_user_json";
 	public static final String PREF_KEY_CREDENTIAL_SAVED="credential_saved";

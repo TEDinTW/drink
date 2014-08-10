@@ -8,7 +8,10 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -32,6 +35,24 @@ public class SignInActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		setContentView(R.layout.sign_in);
+
+		etUserName = (EditText) findViewById(R.id.etUserName);
+		etPassword = (EditText) findViewById(R.id.etPassword);
+		chkRememberMe = (CheckBox) findViewById(R.id.chkRememberMe);
+		
+		ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+		if (networkInfo== null || !networkInfo.isConnected()) {
+			Bundle args = new Bundle();
+			args.putString(Constants.GENERIC_ALERT_DIALOG_TITLE_PARAM_NAME, SignInActivity.this.getResources().getString(R.string.error_title_no_connection));
+			args.putString(Constants.GENERIC_ALERT_DIALOG_TEXT_PARAM_NAME, getResources().getString(R.string.error_msg_no_connectionr));
+			DialogFragment newFragment = GenericAlertDialog.newInstance(args);
+			newFragment.show(getFragmentManager(), "dialog");
+			
+			return;
+		} 
+		
 		boolean credentialSaved = PreferencesManager.isCredentialSaved(this);
 		String jsonStr = PreferencesManager.loadUser(this);
 
@@ -41,11 +62,9 @@ public class SignInActivity extends Activity {
 			return;
 		}
 
-		setContentView(R.layout.sign_in);
 
-		etUserName = (EditText) findViewById(R.id.etUserName);
-		etPassword = (EditText) findViewById(R.id.etPassword);
-		chkRememberMe = (CheckBox) findViewById(R.id.chkRememberMe);
+
+
 	}
 
 	public void signIn(View view) {
@@ -101,20 +120,9 @@ public class SignInActivity extends Activity {
 		// onPostExecute displays the results of the AsyncTask.
 		@Override
 		protected void onPostExecute(AuthenticateResponse response) {
-			if (!response.isHasErrors()) {
-				// Serialize the authenticated user to preference file
-				User user = new User();
-				user.setUserId(response.getUserId());
-				user.setUserName(response.getUserName());
-				user.setUserPhone(response.getUserPhone());
-				user.setUserAddress(response.getUserAddress());
-				serializedToPreference(user);
-
-				Intent intent = new Intent(SignInActivity.this, DrinkOrderActivity.class);
-				startActivity(intent);
-			} else {
+			if (response ==null || response.isHasErrors()) {
 				String errorMessage = null;
-				if (response.getErrors() != null && !response.getErrors().isEmpty()) {
+				if (response!=null && response.getErrors() != null && !response.getErrors().isEmpty()) {
 					// only retrieve the first error message
 					errorMessage = response.getErrors().get(0).getErrorMessage();
 				} else {
@@ -126,6 +134,17 @@ public class SignInActivity extends Activity {
 				args.putString(Constants.GENERIC_ALERT_DIALOG_TEXT_PARAM_NAME, errorMessage);
 				DialogFragment newFragment = GenericAlertDialog.newInstance(args);
 				newFragment.show(getFragmentManager(), "dialog");
+			} else {
+				// Serialize the authenticated user to preference file
+				User user = new User();
+				user.setUserId(response.getUserId());
+				user.setUserName(response.getUserName());
+				user.setUserPhone(response.getUserPhone());
+				user.setUserAddress(response.getUserAddress());
+				serializedToPreference(user);
+
+				Intent intent = new Intent(SignInActivity.this, DrinkOrderActivity.class);
+				startActivity(intent);
 			}
 
 		}

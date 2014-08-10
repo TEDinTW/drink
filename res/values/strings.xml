@@ -28,6 +28,8 @@
     <string name="dlg_btn_no">否</string>
     <string name="error_generic_title">錯誤</string>
     <string name="error_msg_unexpected_error">系統錯誤 請稍後再試</string>
+    <string name="error_title_no_connection">網路連線錯誤</string>
+    <string name="error_msg_no_connectionr">請確認是否已經連線到網路</string>    
     <string name="error_no_commerce_item_selected">尚未選取任何產品</string>
     <string name="tv_drinkName_name">品名</string>
     <string name="tv_sugar_level">甜度</string>

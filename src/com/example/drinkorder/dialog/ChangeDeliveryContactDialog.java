@@ -20,6 +20,7 @@ public class ChangeDeliveryContactDialog extends DialogFragment {
 	}
 
 	public ChangeDeliveryContactDialog() {
+		
 	}
 
 	@Override

@@ -1,0 +1,171 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/order_review_title"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/tv_drinkName_name"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+        </TextView>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/tv_ice_level"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+        </TextView>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/tv_sugar_level"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+        </TextView>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            android:text="@string/tv_quantity"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+        </TextView>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            android:text="@string/tv_subtotal"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+        </TextView>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lvOrderDrinks"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/lime"
+        android:drawSelectorOnTop="false" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/tvTotalQtyCaption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="@string/tv_total_quantity"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/tvTotalQty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tvTotalQtyCaption"
+            android:paddingLeft="5dp"
+            android:paddingRight="10dp"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/tvTotalAmountCaption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tvTotalQty"
+            android:text="@string/tv_total_amount"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/tvTotalAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tvTotalAmountCaption"
+            android:paddingLeft="5dp"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
+        </TextView>
+    </RelativeLayout>
+
+
+    <TableLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*" >
+
+        <TableRow>
+
+            <TextView
+                style="@style/inputCaption"
+                android:text="@string/tv_contact_name" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/tvContactName"
+                style="@style/inputField" >
+            </TextView>
+
+            <TextView
+                style="@style/inputCaption"
+                android:text="@string/tv_contact_phone" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/tvContactPhone"
+                style="@style/inputField" >
+            </TextView>
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                style="@style/inputCaption"
+                android:text="@string/tv_delivery_addrress"
+                android:textAppearance="?android:attr/textAppearanceSmall" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/tvDeliveryAddr"
+                style="@style/inputField"
+                android:layout_span="2"
+                android:textAppearance="?android:attr/textAppearanceSmall" >
+            </TextView>
+
+            <Button
+                android:id="@+id/btnChangePhoneAddr"
+                style="@style/inputField"
+                android:onClick="changePhoneAddr"
+                android:text="@string/btn_change_phone_addr" />
+        </TableRow>
+    </TableLayout>
+
+    <Button
+        android:id="@+id/btnSubmitOrder"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="submitOrder"
+        android:text="@string/btn_submit_order" />
+
+</LinearLayout>

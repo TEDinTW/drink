@@ -1,0 +1,60 @@
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:stretchColumns="*" >
+
+    <TableRow>
+
+        <TextView
+            style="@style/dialogInputCaption"
+            android:text="@string/tv_contact_name" />
+
+        <EditText
+            android:id="@+id/etDlvContactName"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_span="2" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            style="@style/dialogInputCaption"
+            android:text="@string/tv_contact_phone" />
+
+        <EditText
+            android:id="@+id/etDlvContactPhone"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_span="2" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            style="@style/dialogInputCaption"
+            android:text="@string/tv_delivery_addrress" />
+
+        <EditText
+            android:id="@+id/etDlvContactAddr"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_span="2" />
+    </TableRow>
+
+    <TableRow>
+
+        <Button
+            android:id="@+id/btnOk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_ok" />
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_cancel" />
+    </TableRow>
+
+</TableLayout>

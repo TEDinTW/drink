@@ -17,7 +17,7 @@ import com.example.drinkorder.bean.jackson.SubmitOrderResponse;
 public class WebServiceGateway {
 
 //	private static final String authURL = "http://192.168.11.4:8080/OrderDrinkWebService/rest/drink/authenticate";
-	private static final String authURL = "http://192.168.0.188:8888/ted/jueseb/mobileTest";
+	private static final String authURL = "http://www.ebeer.com.tw/ted/jueseb/index.php/mobileTest/Authenticate";
 	private static final String drinkDataURL = "http://192.168.11.4:8080/OrderDrinkWebService/rest/drink/getdrinkdata";
 	private static final String submitOrderURL = "http://192.168.11.4:8080/OrderDrinkWebService/rest/drink/submitOrder";
 	private static final int BUFFER_SIZE = 1024;

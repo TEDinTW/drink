@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -40,12 +41,14 @@ import com.example.drinkorder.dialog.DeleteConfirmationDialog;
 import com.example.drinkorder.dialog.DrinkDetailPickerDialog;
 import com.example.drinkorder.dialog.GenericConfirmationDialogListerner;
 import com.example.drinkorder.dialog.GenericDeleteConfirmationDialogListerner;
+import com.example.drinkorder.exception.ServiceException;
 import com.example.drinkorder.utils.BeansToAdapterElementsConverter;
 import com.example.drinkorder.utils.JsonManager;
 import com.example.drinkorder.utils.PreferencesManager;
 import com.example.drinkorder.utils.WebServiceGateway;
 
 public class DrinkOrderActivity extends FragmentActivity implements GenericConfirmationDialogListerner, GenericDeleteConfirmationDialogListerner {
+	private static final String TAG = "DrinkOrderActivity";
 	private Spinner spChooseDrink;
 	private ListView lvOrderDrinks;
 	private TextView tvTotalQty, tvTotalAmount;
@@ -201,8 +204,12 @@ public class DrinkOrderActivity extends FragmentActivity implements GenericConfi
 	protected void onResume() {
 		super.onResume();
 
-		if (JsonManager.getOrderedDrinks(this) != null) {
-			orderedDrinks = JsonManager.getOrderedDrinks(this);
+		try {
+			if (JsonManager.getOrderedDrinks(this) != null) {
+				orderedDrinks = JsonManager.getOrderedDrinks(this);
+			}
+		} catch (ServiceException e) {
+			Log.e(TAG, "Error thrown from onResume(), e=" + e.getMessage());
 		}
 
 		refreshList(orderedDrinks);
@@ -238,15 +245,8 @@ public class DrinkOrderActivity extends FragmentActivity implements GenericConfi
 			try {
 				String jsonStr = mapper.writeValueAsString(orderDrinksBean);
 				PreferencesManager.serializeOrderedDrink(this, jsonStr);
-			} catch (JsonGenerationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JsonMappingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (Exception e) {
+				Log.e(TAG, "Error thrown from serializedOrderDrinks(), e=" + e.getMessage());
 			}
 		}
 	}
@@ -254,19 +254,24 @@ public class DrinkOrderActivity extends FragmentActivity implements GenericConfi
 	private class GetDrinkDataTask extends AsyncTask<Void, Void, DrinkData> {
 		@Override
 		protected DrinkData doInBackground(Void... params) {
-			String latestDrinkDataStr = WebServiceGateway.getDrinkDataJsonString();
+			try {
+				String latestDrinkDataStr = WebServiceGateway.getDrinkDataJsonString();
 
-			if (latestDrinkDataStr != null) {
-				// Retrieve the drink data from server and serialize it to
-				// preference file
-				PreferencesManager.serializeDrinkData(DrinkOrderActivity.this, latestDrinkDataStr);
+				if (latestDrinkDataStr != null) {
+					// Retrieve the drink data from server and serialize it to
+					// preference file
+					PreferencesManager.serializeDrinkData(DrinkOrderActivity.this, latestDrinkDataStr);
 
-				return WebServiceGateway.getDrinkData();
-			} else {
+					return WebServiceGateway.getDrinkData();
+				} else {
 
-				// If not able to retrieve the latest drink data, load from the
-				// preference file
-				return JsonManager.getDrinkData(DrinkOrderActivity.this);
+					// If not able to retrieve the latest drink data, load from
+					// the preference file
+					return JsonManager.getDrinkData(DrinkOrderActivity.this);
+				}
+			} catch (ServiceException e) {
+				Log.e(TAG, "Error thrown from doInBackground, e=" + e.getMessage());
+				return null;
 			}
 		}
 
@@ -324,5 +329,8 @@ public class DrinkOrderActivity extends FragmentActivity implements GenericConfi
 		serializedOrderDrinks(orderedDrinks);
 
 	}
-
+	
+	@Override
+	public void onBackPressed() {
+	}
 }

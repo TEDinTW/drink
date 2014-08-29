@@ -1,9 +1,5 @@
 package com.example.drinkorder.activity;
 
-import java.io.IOException;
-
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import android.app.Activity;
@@ -14,6 +10,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -24,10 +21,12 @@ import com.example.drinkorder.bean.jackson.AuthenticateRequest;
 import com.example.drinkorder.bean.jackson.AuthenticateResponse;
 import com.example.drinkorder.bean.jackson.User;
 import com.example.drinkorder.dialog.GenericAlertDialog;
+import com.example.drinkorder.exception.ServiceException;
 import com.example.drinkorder.utils.PreferencesManager;
 import com.example.drinkorder.utils.WebServiceGateway;
 
 public class SignInActivity extends Activity {
+	private static final String TAG = "SignInActivity";
 	private EditText etUserName, etPassword;
 	private CheckBox chkRememberMe;
 
@@ -61,10 +60,6 @@ public class SignInActivity extends Activity {
 			startActivity(intent);
 			return;
 		}
-
-
-
-
 	}
 
 	public void signIn(View view) {
@@ -86,23 +81,14 @@ public class SignInActivity extends Activity {
 			ObjectMapper mapper = new ObjectMapper();
 			try {
 				String jsonStr = mapper.writeValueAsString(user);
-
 				PreferencesManager.serializeUser(this, jsonStr);
 
 				// if remember me is checked, turn on the auto sign in flag
 				if (chkRememberMe.isChecked()) {
 					PreferencesManager.setCredentialSaved(this, true);
 				}
-
-			} catch (JsonGenerationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JsonMappingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (Exception e) {
+				Log.e(TAG, "Error thrown from serializedToPreference(), e=" + e.getMessage());
 			}
 		}
 	}
@@ -113,8 +99,13 @@ public class SignInActivity extends Activity {
 			AuthenticateRequest authReq = new AuthenticateRequest();
 			authReq.setUserId(params[0]);
 			authReq.setUserPwd(params[1]);
+			try{
+				return WebServiceGateway.authenticate(authReq);
+			} catch (ServiceException e){
+				Log.e(TAG, "Error thrown from doInBackground, e=" + e.getMessage());
+				return null;
+			}
 
-			return WebServiceGateway.authenticate(authReq);
 		}
 
 		// onPostExecute displays the results of the AsyncTask.

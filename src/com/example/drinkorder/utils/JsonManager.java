@@ -1,11 +1,7 @@
 package com.example.drinkorder.utils;
 
-import java.io.IOException;
 import java.util.List;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import android.content.Context;
@@ -14,12 +10,13 @@ import com.example.drinkorder.bean.jackson.DrinkData;
 import com.example.drinkorder.bean.jackson.OrderedDrink;
 import com.example.drinkorder.bean.jackson.OrderedDrinks;
 import com.example.drinkorder.bean.jackson.User;
+import com.example.drinkorder.exception.ServiceException;
 
 public class JsonManager {
-	public static List<OrderedDrink> getOrderedDrinks(Context context) {
+	public static List<OrderedDrink> getOrderedDrinks(Context context) throws ServiceException {
 
 		String jsonStr = PreferencesManager.loadOrderedDrink(context);
-		
+
 		List<OrderedDrink> orderedDrinks = null;
 		if (!StringUtil.isEmpty(jsonStr)) {
 			ObjectMapper mapper = new ObjectMapper();
@@ -28,21 +25,14 @@ public class JsonManager {
 			try {
 				orderedDrinksBean = mapper.readValue(jsonStr, OrderedDrinks.class);
 				orderedDrinks = orderedDrinksBean.getDrinks();
-			} catch (JsonParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JsonMappingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (Exception e) {
+				throw new ServiceException(e.getMessage());
 			}
 		}
 		return orderedDrinks;
 	}
 
-	public static DrinkData getDrinkData(Context context) {
+	public static DrinkData getDrinkData(Context context) throws ServiceException {
 		String jsonStr = PreferencesManager.loadDrinkData(context);
 
 		DrinkData drinkData = null;
@@ -51,23 +41,14 @@ public class JsonManager {
 
 			try {
 				drinkData = mapper.readValue(jsonStr, DrinkData.class);
-
-			} catch (JsonParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JsonMappingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (Exception e) {
+				throw new ServiceException(e.getMessage());
 			}
 		}
 		return drinkData;
 	}
 
-	
-	public static User getSignInUser(Context context) {
+	public static User getSignInUser(Context context) throws ServiceException {
 		String jsonStr = PreferencesManager.loadUser(context);
 
 		User user = null;
@@ -76,58 +57,35 @@ public class JsonManager {
 
 			try {
 				user = mapper.readValue(jsonStr, User.class);
-
-			} catch (JsonParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JsonMappingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (Exception e) {
+				throw new ServiceException(e.getMessage());
 			}
 		}
 		return user;
 	}
-	
-	public static Object parseSubmitOrderResponse(String jsonStr, Class<?> cls) {
+
+	public static Object parseSubmitOrderResponse(String jsonStr, Class<?> cls) throws ServiceException {
 		Object response = null;
 		if (!StringUtil.isEmpty(jsonStr)) {
 			ObjectMapper mapper = new ObjectMapper();
 
 			try {
 				response = mapper.readValue(jsonStr, cls);
-
-			} catch (JsonParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JsonMappingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (Exception e) {
+				throw new ServiceException(e.getMessage());
 			}
 		}
 		return response;
 	}
 
 	// should be generic
-	public static String toJsonString(Object request) {
+	public static String toJsonString(Object request) throws ServiceException {
 		String jsonStr = null;
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			jsonStr = mapper.writeValueAsString(request);
-		} catch (JsonGenerationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			throw new ServiceException(e.getMessage());
 		}
 		return jsonStr;
 	}

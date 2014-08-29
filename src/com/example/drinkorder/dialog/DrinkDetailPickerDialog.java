@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.app.DialogFragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,7 +13,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.example.drinkorder.Constants;
 import com.example.drinkorder.R;
@@ -20,6 +20,7 @@ import com.example.drinkorder.bean.jackson.Drink;
 import com.example.drinkorder.bean.jackson.OrderedDrink;
 
 public class DrinkDetailPickerDialog extends DialogFragment {
+	private static final String TAG = "DrinkDetailPickerDialog";
 
 	public static DrinkDetailPickerDialog newInstance(Bundle args) {
 		DrinkDetailPickerDialog dialog = new DrinkDetailPickerDialog();
@@ -69,7 +70,7 @@ public class DrinkDetailPickerDialog extends DialogFragment {
 		}
 
 		Button btnConfirmDrinkDetail = (Button) v.findViewById(R.id.btnConfirmDrinkDetail);
-		Button btnCancel = (Button) v.findViewById(R.id.btnCancel);		
+		Button btnCancel = (Button) v.findViewById(R.id.btnCancel);
 		Button btnQtyInc = (Button) v.findViewById(R.id.btnQtyInc);
 		Button btnQtyDec = (Button) v.findViewById(R.id.btnQtyDec);
 
@@ -80,7 +81,7 @@ public class DrinkDetailPickerDialog extends DialogFragment {
 					Integer curQty = Integer.parseInt(curQtyStr);
 					etDrinkQuantity.setText(String.valueOf(curQty + 1));
 				} catch (NumberFormatException e) {
-
+					Log.e(TAG, "Error thrown from onCreateView(), e=" + e.getMessage());
 				}
 			}
 		});
@@ -94,7 +95,7 @@ public class DrinkDetailPickerDialog extends DialogFragment {
 						etDrinkQuantity.setText(String.valueOf(curQty - 1));
 					}
 				} catch (NumberFormatException e) {
-
+					Log.e(TAG, "Error thrown from onCreateView(), e=" + e.getMessage());
 				}
 			}
 		});
@@ -126,8 +127,7 @@ public class DrinkDetailPickerDialog extends DialogFragment {
 				dismiss();
 			}
 		});
-		
-		
+
 		btnCancel.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				dismiss();

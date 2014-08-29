@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,15 +23,17 @@ import com.example.drinkorder.bean.jackson.User;
 import com.example.drinkorder.dialog.ChangeDeliveryContactDialog;
 import com.example.drinkorder.dialog.GenericAlertDialog;
 import com.example.drinkorder.dialog.GenericConfirmationDialogListerner;
+import com.example.drinkorder.exception.ServiceException;
 import com.example.drinkorder.utils.BeansToAdapterElementsConverter;
 import com.example.drinkorder.utils.JsonManager;
 import com.example.drinkorder.utils.PreferencesManager;
 import com.example.drinkorder.utils.WebServiceGateway;
 
 public class OrderReviewActivity extends FragmentActivity implements GenericConfirmationDialogListerner {
+	private static final String TAG = "OrderReviewActivity";
 	private ListView lvOrderDrinks;
 	private TextView tvTotalQty, tvTotalAmount, tvContactName, tvContactPhone, tvDeliveryAddr;
- 
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -44,11 +47,17 @@ public class OrderReviewActivity extends FragmentActivity implements GenericConf
 		tvContactPhone = (TextView) findViewById(R.id.tvContactPhone);
 		tvDeliveryAddr = (TextView) findViewById(R.id.tvDeliveryAddr);
 
-		loadOrderedDrink();
-		populateUser();
+		try {
+			loadOrderedDrink();
+			populateUser();
+		} catch (ServiceException e) {
+			Log.e(TAG, "Error thrown from onCreate(), e=" + e.getMessage());
+			showUnexpectedErrorPopup();
+		}
+
 	}
 
-	protected void populateUser() {
+	protected void populateUser() throws ServiceException {
 		User user = JsonManager.getSignInUser(this);
 		if (user != null) {
 			tvContactName.setText(user.getUserName());
@@ -57,7 +66,7 @@ public class OrderReviewActivity extends FragmentActivity implements GenericConf
 		}
 	}
 
-	protected void loadOrderedDrink() {
+	protected void loadOrderedDrink() throws ServiceException {
 		List<OrderedDrink> orderedDrinks = JsonManager.getOrderedDrinks(this);
 
 		OrderedDrinkAdapter adapter = null;
@@ -78,35 +87,43 @@ public class OrderReviewActivity extends FragmentActivity implements GenericConf
 		lvOrderDrinks.setAdapter(adapter);
 	}
 
-
-	
 	public void submitOrder(View view) {
 
 		SubmitOrderRequest submitOrder = new SubmitOrderRequest();
 
-		User user = JsonManager.getSignInUser(this);
-		if (user != null) {
-			submitOrder.setUserId(user.getUserId());
+		try {
+			User user = JsonManager.getSignInUser(this);
+			if (user != null) {
+				submitOrder.setUserId(user.getUserId());
+			}
+
+			String contactName = tvContactName.getText().toString();
+			String contactPhone = tvContactPhone.getText().toString();
+			String deliveryAddr = tvDeliveryAddr.getText().toString();
+
+			submitOrder.setContactName(contactName);
+			submitOrder.setContactPhone(contactPhone);
+			submitOrder.setDeliveryAddress(deliveryAddr);
+
+			List<OrderedDrink> orderedDrinks = JsonManager.getOrderedDrinks(this);
+			submitOrder.setDrinks(orderedDrinks);
+
+			int orderTotal = 0;
+			for (OrderedDrink orderedDrink : orderedDrinks) {
+				orderTotal += orderedDrink.getSubTotal();
+			}
+			submitOrder.setTotal(orderTotal);
+			new SubmitOrderTask().execute(submitOrder);
+		} catch (ServiceException e) {
+			Log.e(TAG, "Error thrown from submitOrder(), e=" + e.getMessage());
+
+			String errorMessage = OrderReviewActivity.this.getResources().getString(R.string.error_msg_unexpected_error);
+			Bundle args = new Bundle();
+			args.putString(Constants.GENERIC_ALERT_DIALOG_TITLE_PARAM_NAME, OrderReviewActivity.this.getResources().getString(R.string.error_generic_title));
+			args.putString(Constants.GENERIC_ALERT_DIALOG_TEXT_PARAM_NAME, errorMessage);
+			DialogFragment newFragment = GenericAlertDialog.newInstance(args);
+			newFragment.show(getFragmentManager(), "dialog");
 		}
-
-		String contactName = tvContactName.getText().toString();
-		String contactPhone = tvContactPhone.getText().toString();
-		String deliveryAddr = tvDeliveryAddr.getText().toString();
-
-		submitOrder.setContactName(contactName);
-		submitOrder.setContactPhone(contactPhone);
-		submitOrder.setDeliveryAddress(deliveryAddr);
-
-		List<OrderedDrink> orderedDrinks = JsonManager.getOrderedDrinks(this);
-		submitOrder.setDrinks(orderedDrinks);
-
-		int orderTotal = 0;
-		for (OrderedDrink orderedDrink : orderedDrinks) {
-			orderTotal += orderedDrink.getSubTotal();
-		}
-		submitOrder.setTotal(orderTotal);
-
-		new SubmitOrderTask().execute(submitOrder);
 	}
 
 	public void changePhoneAddr(View view) {
@@ -119,6 +136,19 @@ public class OrderReviewActivity extends FragmentActivity implements GenericConf
 
 	protected void showChangeDeliveryContactDialog(Bundle args) {
 		DialogFragment newFragment = ChangeDeliveryContactDialog.newInstance(args);
+		newFragment.show(getFragmentManager(), "dialog");
+	}
+
+	protected void showUnexpectedErrorPopup() {
+		String errorMessage = OrderReviewActivity.this.getResources().getString(R.string.error_msg_unexpected_error);
+		showErrorPopup(errorMessage);
+	}
+
+	protected void showErrorPopup(String errorMessage) {
+		Bundle args = new Bundle();
+		args.putString(Constants.GENERIC_ALERT_DIALOG_TITLE_PARAM_NAME, OrderReviewActivity.this.getResources().getString(R.string.error_generic_title));
+		args.putString(Constants.GENERIC_ALERT_DIALOG_TEXT_PARAM_NAME, errorMessage);
+		DialogFragment newFragment = GenericAlertDialog.newInstance(args);
 		newFragment.show(getFragmentManager(), "dialog");
 	}
 
@@ -141,34 +171,35 @@ public class OrderReviewActivity extends FragmentActivity implements GenericConf
 	private class SubmitOrderTask extends AsyncTask<SubmitOrderRequest, Void, SubmitOrderResponse> {
 		@Override
 		protected SubmitOrderResponse doInBackground(SubmitOrderRequest... requests) {
-			return WebServiceGateway.submitOrder(requests[0]);
+			try {
+				return WebServiceGateway.submitOrder(requests[0]);
+			} catch (ServiceException e) {
+				Log.e(TAG, "Error thrown from doInBackground(), e=" + e.getMessage());
+				return null;
+			}
+
 		}
 
 		// onPostExecute displays the results of the AsyncTask.
 		@Override
 		protected void onPostExecute(SubmitOrderResponse response) {
-			if (response ==null || response.isHasErrors()) {
-				
-				String errorMessage=null;
-				
-				if(response!=null && response.getErrors()!=null && !response.getErrors().isEmpty()){
+			if (response == null || response.isHasErrors()) {
+
+				String errorMessage = null;
+
+				if (response != null && response.getErrors() != null && !response.getErrors().isEmpty()) {
 					// only retrieve the first error message
-					errorMessage=response.getErrors().get(0).getErrorMessage();
-				}else{
-					errorMessage=OrderReviewActivity.this.getResources().getString(R.string.error_msg_unexpected_error);
+					errorMessage = response.getErrors().get(0).getErrorMessage();
+				} else {
+					errorMessage = OrderReviewActivity.this.getResources().getString(R.string.error_msg_unexpected_error);
 				}
-				
 
-				Bundle args=new Bundle();
-				args.putString(Constants.GENERIC_ALERT_DIALOG_TITLE_PARAM_NAME, OrderReviewActivity.this.getResources().getString(R.string.error_generic_title));
-				args.putString(Constants.GENERIC_ALERT_DIALOG_TEXT_PARAM_NAME, errorMessage);
-				DialogFragment newFragment = GenericAlertDialog.newInstance(args);
-				newFragment.show(getFragmentManager(), "dialog");
-
+				showErrorPopup(errorMessage);
 			} else {
-				// Once the order is successfully submitted, clear the ordered list from preference
+				// Once the order is successfully submitted, clear the ordered
+				// list from preference
 				PreferencesManager.removeOrderedDrink(OrderReviewActivity.this);
-				
+
 				Intent intent = new Intent(OrderReviewActivity.this, OrderConfirmationActivity.class);
 				intent.putExtra(Constants.ORDER_ID_PARAM_NAME, response.getOrderId());
 				intent.putExtra(Constants.DLV_CONTACT_NAME_PARAM_NAME, tvContactName.getText());

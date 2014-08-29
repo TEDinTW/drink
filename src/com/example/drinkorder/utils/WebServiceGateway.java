@@ -13,30 +13,35 @@ import com.example.drinkorder.bean.jackson.AuthenticateResponse;
 import com.example.drinkorder.bean.jackson.DrinkData;
 import com.example.drinkorder.bean.jackson.SubmitOrderRequest;
 import com.example.drinkorder.bean.jackson.SubmitOrderResponse;
+import com.example.drinkorder.exception.ServiceException;
 
 public class WebServiceGateway {
 
+<<<<<<< HEAD
 //	private static final String authURL = "http://192.168.11.4:8080/OrderDrinkWebService/rest/drink/authenticate";
 	private static final String authURL = "http://www.ebeer.com.tw/ted/jueseb/index.php/mobileTest/Authentication";
+=======
+	//private static final String authURL ="http://192.168.1.103:8080/OrderDrinkWebService/rest/drink/authenticate";
+	//private static final String drinkDataURL ="http://192.168.1.103:8080/OrderDrinkWebService/rest/drink/getdrinkdata";
+	//private static final String submitOrderURL ="http://192.168.1.103:8080/OrderDrinkWebService/rest/drink/submitOrder";
+	private static final String authURL = "http://www.ebeer.com.tw/ted/jueseb/index.php/mobileTest/Authenticate";
+>>>>>>> FETCH_HEAD
 	private static final String drinkDataURL = "http://www.ebeer.com.tw/ted/jueseb/index.php/mobileTest/getdrinkdata";
 	private static final String submitOrderURL = "http://www.ebeer.com.tw/ted/jueseb/index.php/mobileTest/submitOrder";
 	private static final int BUFFER_SIZE = 1024;
 
-	public static AuthenticateResponse authenticate(AuthenticateRequest authReq) {
+	public static AuthenticateResponse authenticate(AuthenticateRequest authReq) throws ServiceException {
 		try {
 			String reqJsonStr = JsonManager.toJsonString(authReq);
 			URL url = new URL(authURL);
 			String respJsonStr = jsonPost(reqJsonStr, url);
 			return (AuthenticateResponse) JsonManager.parseSubmitOrderResponse(respJsonStr, AuthenticateResponse.class);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ServiceException(e.getMessage());
 		}
-
-		return null;
 	}
 
-	public static SubmitOrderResponse submitOrder(SubmitOrderRequest request) {
+	public static SubmitOrderResponse submitOrder(SubmitOrderRequest request) throws ServiceException {
 		String reqJsonStr = JsonManager.toJsonString(request);
 
 		try {
@@ -44,40 +49,29 @@ public class WebServiceGateway {
 			String respJsonStr = jsonPost(reqJsonStr, url);
 			return (SubmitOrderResponse) JsonManager.parseSubmitOrderResponse(respJsonStr, SubmitOrderResponse.class);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ServiceException(e.getMessage());
 		}
-		return null;
 	}
 
-	public static String getDrinkDataJsonString() {
+	public static String getDrinkDataJsonString() throws ServiceException {
 		try {
 			URL url = new URL(drinkDataURL);
 			return jsonGet(url);
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ServiceException(e.getMessage());
 		}
-
-		return null;
 	}
-	
-	
-	public static DrinkData getDrinkData() {
-		DrinkData drinkData = null;
+
+	public static DrinkData getDrinkData() throws ServiceException {
 		try {
 			return (DrinkData) JsonManager.parseSubmitOrderResponse(getDrinkDataJsonString(), DrinkData.class);
-
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ServiceException(e.getMessage());
 		}
-
-		return drinkData;
 	}
 
-	private static String jsonGet(URL url) throws Exception {
+	private static String jsonGet(URL url) throws ServiceException {
 		InputStream is = null;
 
 		try {
@@ -98,7 +92,7 @@ public class WebServiceGateway {
 				return contentAsString;
 			}
 		} catch (IOException e) {
-			throw new Exception(e.getMessage());
+			throw new ServiceException(e.getMessage());
 		} finally {
 			if (is != null) {
 				try {
@@ -139,7 +133,7 @@ public class WebServiceGateway {
 				return inputStreamTOString(is);
 			}
 		} catch (IOException e) {
-			throw new Exception(e.getMessage());
+			throw new ServiceException(e.getMessage());
 		} finally {
 			if (is != null) {
 				try {

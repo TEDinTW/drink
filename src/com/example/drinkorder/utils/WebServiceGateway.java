@@ -17,15 +17,15 @@ import com.example.drinkorder.exception.ServiceException;
 
 public class WebServiceGateway {
 
-<<<<<<< HEAD
+
 //	private static final String authURL = "http://192.168.11.4:8080/OrderDrinkWebService/rest/drink/authenticate";
 	private static final String authURL = "http://www.ebeer.com.tw/ted/jueseb/index.php/mobileTest/Authentication";
-=======
+
 	//private static final String authURL ="http://192.168.1.103:8080/OrderDrinkWebService/rest/drink/authenticate";
 	//private static final String drinkDataURL ="http://192.168.1.103:8080/OrderDrinkWebService/rest/drink/getdrinkdata";
 	//private static final String submitOrderURL ="http://192.168.1.103:8080/OrderDrinkWebService/rest/drink/submitOrder";
-	private static final String authURL = "http://www.ebeer.com.tw/ted/jueseb/index.php/mobileTest/Authenticate";
->>>>>>> FETCH_HEAD
+//	private static final String authURL = "http://www.ebeer.com.tw/ted/jueseb/index.php/mobileTest/Authenticate";
+
 	private static final String drinkDataURL = "http://www.ebeer.com.tw/ted/jueseb/index.php/mobileTest/getdrinkdata";
 	private static final String submitOrderURL = "http://www.ebeer.com.tw/ted/jueseb/index.php/mobileTest/submitOrder";
 	private static final int BUFFER_SIZE = 1024;
